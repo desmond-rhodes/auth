@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+docker build -t auth .
+docker run -itd -vauth:/auth -v/mnt:/mnt -v/home:/home --name auth auth
+docker exec -it auth groupadd --gid $(id -g) $(whoami)
+docker exec -it auth useradd --uid $(id -u) --gid $(id -g) --home-dir /auth/$(id -u)-$(id -g) -m $(whoami)
+alias auth='docker exec -it -u$(id -u):$(id -g) -w$PWD auth'
